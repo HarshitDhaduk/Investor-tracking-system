@@ -1,0 +1,30 @@
+.env
+node_modules/*
+public/*
+*.DS_Store
+*.log
+dist/*
+build/*
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.clinerules/*
+.kiro/*
+.amazonq/*
+
+# public/uploads
+uploads/*
+public/*/uploads/*
+service/firebase.json
+
+# database
+database/*
+database/*.sql
+
+# postman
+postman/*
