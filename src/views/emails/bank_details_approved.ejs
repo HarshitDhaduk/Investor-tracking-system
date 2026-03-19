@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details Approved</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#01303F;">
+
+    <!-- Full background wrapper -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#01303F" style="background-color:#01303F; padding:30px 15px;">
+        <tr>
+            <td align="center">
+
+                <!-- Main container -->
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color:#01303F; border:1px solid #114656; border-radius:14px; padding:35px;">
+
+                    <!-- HEADER (Text Logo) -->
+                    <tr>
+                        <td align="center" style="padding-bottom:25px;">
+                            <span style="font-family: Arial, sans-serif; font-size:24px; font-weight:bold; color:#4EF0D5;">
+                                Morval Investments
+                            </span>
+                        </td>
+                    </tr>
+
+                    <!-- TITLE -->
+                    <tr>
+                        <td>
+                            <h2 style="color:#4EF0D5; font-size:22px; margin:0 0 15px 0;">
+                                Bank Details Approved ✓
+                            </h2>
+                        </td>
+                    </tr>
+
+                    <!-- BODY CONTENT -->
+                    <tr>
+                        <td style="color:#D8EDEE; font-size:15px; line-height:1.6;">
+                            <p>Hello <%= investor_name %>,</p>
+                            <p>Great news! Your bank details have been reviewed and approved by our admin team.</p>
+                        </td>
+                    </tr>
+
+                    <!-- APPROVAL INFO BOX -->
+                    <tr>
+                        <td style="padding:20px 0;">
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="background-color:#114656; border-radius:8px;">
+                                <tr>
+                                    <td style="color:#D8EDEE; font-size:15px;">
+                                        <p style="margin:0 0 10px 0;"><strong style="color:#4EF0D5;">Account Holder:</strong> <%= account_holder_name %></p>
+                                        <p style="margin:0 0 10px 0;"><strong style="color:#4EF0D5;">Bank Name:</strong> <%= bank_name %></p>
+                                        <p style="margin:0;"><strong style="color:#4EF0D5;">Approved At:</strong> <%= approved_at %></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- ADDITIONAL INFO -->
+                    <tr>
+                        <td style="color:#D8EDEE; font-size:15px; line-height:1.6;">
+                            <p>Your bank details are now active in our system. You can proceed with transactions and withdrawals.</p>
+                            <p>If you need to update your bank details in the future, you can do so from your account settings.</p>
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding-top:30px; border-top:1px solid #114656; color:#90A8AB; font-size:12px;">
+                            <p>© 2025 Morval Investments. All rights reserved.</p>
+                            <p>This is an automated email. Please do not reply to this message.</p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- End container -->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

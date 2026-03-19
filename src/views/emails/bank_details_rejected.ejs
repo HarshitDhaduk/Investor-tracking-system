@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details Rejected</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#01303F;">
+
+    <!-- Full background wrapper -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#01303F" style="background-color:#01303F; padding:30px 15px;">
+        <tr>
+            <td align="center">
+
+                <!-- Main container -->
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color:#01303F; border:1px solid #114656; border-radius:14px; padding:35px;">
+
+                    <!-- HEADER (Text Logo) -->
+                    <tr>
+                        <td align="center" style="padding-bottom:25px;">
+                            <span style="font-family: Arial, sans-serif; font-size:24px; font-weight:bold; color:#4EF0D5;">
+                                Morval Investments
+                            </span>
+                        </td>
+                    </tr>
+
+                    <!-- TITLE -->
+                    <tr>
+                        <td>
+                            <h2 style="color:#4EF0D5; font-size:22px; margin:0 0 15px 0;">
+                                Bank Details Require Attention
+                            </h2>
+                        </td>
+                    </tr>
+
+                    <!-- BODY CONTENT -->
+                    <tr>
+                        <td style="color:#D8EDEE; font-size:15px; line-height:1.6;">
+                            <p>Hello <%= investor_name %>,</p>
+                            <p>We've reviewed your bank details submission, but unfortunately we cannot approve them at this time.</p>
+                        </td>
+                    </tr>
+
+                    <!-- REJECTION REASON BOX -->
+                    <tr>
+                        <td style="padding:20px 0;">
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="background-color:#114656; border-radius:8px; border-left:4px solid #EF4444;">
+                                <tr>
+                                    <td style="color:#D8EDEE; font-size:15px;">
+                                        <p style="margin:0 0 10px 0;"><strong style="color:#4EF0D5;">Reason for Rejection:</strong></p>
+                                        <p style="margin:0; color:#ffffff; font-size:16px;"><%= reject_reason %></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- REJECTION INFO -->
+                    <tr>
+                        <td style="padding:0 0 20px 0;">
+                            <table width="100%" cellpadding="15" cellspacing="0" border="0" style="background-color:#114656; border-radius:8px;">
+                                <tr>
+                                    <td style="color:#D8EDEE; font-size:15px;">
+                                        <p style="margin:0;"><strong style="color:#4EF0D5;">Rejected At:</strong> <%= rejected_at %></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- ADDITIONAL INFO -->
+                    <tr>
+                        <td style="color:#D8EDEE; font-size:15px; line-height:1.6;">
+                            <p>Please review the reason above and update your bank details accordingly. Once you've made the necessary corrections, you can resubmit for review.</p>
+                        </td>
+                    </tr>
+
+                    <!-- BUTTON -->
+                    <tr>
+                        <td align="center" style="padding:20px 0;">
+                            <a href="<%= resubmit_link %>"
+                               style="background:#14B8A6; color:#ffffff; text-decoration:none; padding:12px 30px; font-weight:bold; border-radius:8px; display:inline-block;">
+                                Update Bank Details
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- BACKUP LINK -->
+                    <tr>
+                        <td style="color:#D8EDEE; font-size:15px; line-height:1.6;">
+                            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+                            <p style="word-break:break-all; color:#4EF0D5;"><%= resubmit_link %></p>
+                            <p>If you have any questions or need assistance, please contact our support team.</p>
+                        </td>
+                    </tr>
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td align="center" style="padding-top:30px; border-top:1px solid #114656; color:#90A8AB; font-size:12px;">
+                            <p>© 2025 Morval Investments. All rights reserved.</p>
+                            <p>This is an automated email. Please do not reply to this message.</p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- End container -->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
