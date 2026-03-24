@@ -1,7 +1,9 @@
 -- PostgreSQL Schema for Morval Investor
 
 -- Note: Database creation is usually done outside the script or via \c
--- CREATE DATABASE morval_investor;
+CREATE DATABASE morval_investor;
+
+\c morval_investor;
 
 CREATE TABLE IF NOT EXISTS "users" (
   "id" BIGSERIAL PRIMARY KEY,
