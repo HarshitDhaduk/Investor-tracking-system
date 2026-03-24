@@ -21,10 +21,3 @@ build/*
 uploads/*
 public/*/uploads/*
 service/firebase.json
-
-# database
-database/*
-database/*.sql
-
-# postman
-postman/*

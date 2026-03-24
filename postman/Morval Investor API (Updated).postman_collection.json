@@ -1,0 +1,1916 @@
+{
+    "info": {
+        "_postman_id": "d90af760-d0b8-4ce0-970e-5871f4b0e752",
+        "name": "Investor Tracking APIs",
+        "description": "API collection for Morval Investor authentication and management system",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "46580316",
+        "_collection_link": "https://harshitdhaduk.postman.co/workspace/Harshit-Dhaduk's-Workspace~3a6560f6-0245-4dd9-8539-2b6a6e1f2c42/collection/46580316-d90af760-d0b8-4ce0-970e-5871f4b0e752?action=share&source=collection_link&creator=46580316"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Admin Signup",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.s === 1 && response.r && response.r.auth) {",
+                                    "        pm.environment.set('apikey', response.r.auth.apikey);",
+                                    "        pm.environment.set('token', response.r.auth.token);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript",
+                                "packages": {},
+                                "requests": {}
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "f_name",
+                                    "value": "Admin",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "l_name",
+                                    "value": "User",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "admin@morval-investor.com",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "Admin123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profile_img",
+                                    "description": "(Optional)",
+                                    "type": "file",
+                                    "src": [],
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/signup",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup"
+                            ]
+                        },
+                        "description": "Create admin account (role=2). Returns user data and auth tokens. Auto-saves tokens to collection variables.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.s === 1 && response.r && response.r.auth) {",
+                                    "        pm.environment.set('apikey', response.r.auth.apikey);",
+                                    "        pm.environment.set('token', response.r.auth.token);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript",
+                                "packages": {},
+                                "requests": {}
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "email",
+                                    "value": "admin@morval-investor.com",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "password",
+                                    "value": "Admin123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "role",
+                                    "value": "2",
+                                    "description": "(Required) 1: Investor | 2: Admin",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/login",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "description": "Login with email, password and role. Returns user data, auth tokens, and requires_password_change flag if using temporary credentials. Auto-saves tokens to collection variables.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Change Temp Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "temp_password",
+                                    "value": "us&Th+_u3lz$",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "new_password",
+                                    "value": "NewPassword123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/change-temp-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "change-temp-password"
+                            ]
+                        },
+                        "description": "Change from temporary password to permanent password. User must be authenticated and in temporary state (temp_signup=1)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Forgot Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "email",
+                                    "value": "admin@morval-investor.com",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/forgot-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "forgot-password"
+                            ]
+                        },
+                        "description": "Request password reset. Generates fp_token and sends reset link via email. Returns generic success message regardless of email existence (prevents account enumeration). Works for both admin and investor roles."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Check FP Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "fp_token",
+                                    "value": "",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/check-fp-token",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "check-fp-token"
+                            ]
+                        },
+                        "description": "Verify forgot password token validity. Returns success with user_id if token is valid and account is active. Returns error if token is invalid, expired, or account is inactive."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Reset Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "fp_token",
+                                    "value": "",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "new_password",
+                                    "value": "NewPassword123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/reset-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "reset-password"
+                            ]
+                        },
+                        "description": "Reset password using valid fp_token. Updates password, clears fp_token, and transitions temporary accounts to permanent state (temp_signup=0). Returns error if token is invalid or account is inactive."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "old_password",
+                                    "value": "Admin123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "new_password",
+                                    "value": "NewAdmin123!",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/change-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "change-password"
+                            ]
+                        },
+                        "description": "Change password for authenticated users (both admin and investor). Requires verification of old password before setting new password. User must be authenticated."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update User Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "22",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "f_name",
+                                    "value": "John",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "l_name",
+                                    "value": "Doe",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "john.doe@example.com",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "initial_capital",
+                                    "value": "1500000",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "current_portfolio",
+                                    "value": "120000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "currency",
+                                    "value": "AUD",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "profile_img",
+                                    "description": "(Optional)",
+                                    "type": "file",
+                                    "src": [],
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/auth/update-user",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "update-user"
+                            ]
+                        },
+                        "description": "Update user profile information for authenticated users. Investors can only update their own profile. Admins can update any user's profile by providing user_id parameter. At least one field must be provided. Returns updated user data."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Account",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has correct structure\", function () {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.expect(response).to.have.property('s');",
+                                    "    pm.expect(response).to.have.property('m');",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Deletion successful\", function () {",
+                                    "    const response = pm.response.json();",
+                                    "    pm.expect(response.s).to.eql(1);",
+                                    "    pm.expect(response.m).to.include('deleted');",
+                                    "});"
+                                ],
+                                "type": "text/javascript",
+                                "packages": {},
+                                "requests": {}
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/auth/delete-account",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "delete-account"
+                            ]
+                        },
+                        "description": "Delete authenticated user's account (investors only). Marks account as deleted (status=-1), soft-deletes related bank details, invalidates auth tokens, and sends confirmation email. Admin accounts cannot be deleted through this endpoint. Returns error if account is already deleted. Requires authentication via apikey and token headers."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Authentication endpoints for signup, login and password management"
+        },
+        {
+            "name": "Admin",
+            "item": [
+                {
+                    "name": "Create Investor",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "f_name",
+                                    "value": "Harshit",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "l_name",
+                                    "value": "Dhaduk",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "email",
+                                    "value": "harshit.dhaduk@equitysoft.in",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profile_img",
+                                    "description": "(Optional)",
+                                    "type": "file",
+                                    "src": [],
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "temp_password",
+                                    "value": "6lZPD1KwK*<|",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "initial_capital",
+                                    "value": "500000",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "current_portfolio",
+                                    "value": "120000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "currency",
+                                    "value": "AUD",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/create-investor",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "create-investor"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to create new investor account with temporary credentials. Initial capital must be at least 500,000. Sends email with credentials and returns plaintext temp_password."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Regenerate Temp Password",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "temp_password",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/regenerate-temp-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "regenerate-temp-password"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to regenerate temporary password for existing investor. Only works if investor is still in temporary state (temp_signup=1). Admin can either provide a custom temp_password or let the system auto-generate one. Sends new credentials via email."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Generate Temp Password",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/generate-temp-password",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "generate-temp-password"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to generate a secure temporary password. Returns a random password meeting security requirements."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get All Investors",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/investors?count=0&limit=50",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "investors"
+                            ],
+                            "query": [
+                                {
+                                    "key": "count",
+                                    "value": "0",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "50",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "1",
+                                    "description": "(Optional) 1: active | 0: pending | -1: delete | 2: disabled | 2: rejected/overdue",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Admin-only endpoint to get all investors with pagination and search. Returns list of investors with their profile data. Supports search by name/email and status filtering. Excludes deleted users by default."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Pending Bank Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/pending-bank-details?count=0&limit=50&status=0",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "pending-bank-details"
+                            ],
+                            "query": [
+                                {
+                                    "key": "count",
+                                    "value": "0",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "50",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "0",
+                                    "description": "(Optional) 1: active | 0: pending | -1: delete | 2: disabled | 2: rejected/overdue"
+                                }
+                            ]
+                        },
+                        "description": "Admin-only endpoint to get bank details with optional status filter. Returns list of bank details with investor information. Supports pagination and status filtering. Default shows pending (status=0) bank details."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Review Bank Details",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "bank_details_id",
+                                    "value": "1",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "action",
+                                    "value": "approve",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "reject_reason",
+                                    "value": "Invalid account number format",
+                                    "description": "(Required)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/review-bank-details",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "review-bank-details"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to approve or reject investor bank details. Requires bank_details_id and action ('approve' or 'reject'). If rejecting, reject_reason is required. Only pending bank details (status=0) can be reviewed."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Monthly Performance",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "month",
+                                    "value": "12",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "year",
+                                    "value": "2024",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_amount",
+                                    "value": "3500",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_percentage",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "notes",
+                                    "value": "Strong performance this month",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/add-monthly-performance",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "add-monthly-performance"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to add monthly performance data for an investor. Calculates portfolio value and updates investor's current_portfolio. Sends notification to investor."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Monthly Performance Bulk",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "month",
+                                    "value": "12",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "year",
+                                    "value": "2024",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_amount",
+                                    "value": "3500",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_percentage",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "notes",
+                                    "value": "Strong performance this month",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/add-monthly-performance-bulk",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "add-monthly-performance-bulk"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to add monthly performance data for ALL active investors at once. Applies the same profit amount or percentage to all investors. Calculates portfolio values and updates each investor's current_portfolio. Sends notifications to all investors. Returns summary with successful, failed, and skipped records."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Monthly Performance",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "performance_id",
+                                    "value": "123",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_amount",
+                                    "value": "30000",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profit_percentage",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "notes",
+                                    "value": "Corrected performance data",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/update-monthly-performance",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "update-monthly-performance"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to update existing monthly performance records. Recalculates portfolio value based on previous month's data and sends notification to investor. Returns both old and new values for audit trail. Either profit_amount or profit_percentage must be provided."
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "apikey",
+                                        "value": "{{apikey}}",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "token",
+                                        "value": "{{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "performance_id",
+                                            "value": "123",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "profit_amount",
+                                            "value": "30000",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{prod}}/admin/update-monthly-performance",
+                                    "host": [
+                                        "{{prod}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "update-monthly-performance"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"s\": 1,\n    \"m\": \"Monthly performance updated successfully\",\n    \"r\": {\n        \"performance_id\": 123,\n        \"portfolio_value\": 680000.00,\n        \"profit_amount\": 30000.00,\n        \"profit_percentage\": 4.62,\n        \"old_values\": {\n            \"portfolio_value\": 650000.00,\n            \"profit_amount\": 25000.00,\n            \"profit_percentage\": 4.00\n        }\n    }\n}"
+                        },
+                        {
+                            "name": "Error - Performance Record Not Found",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "apikey",
+                                        "value": "{{apikey}}",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "token",
+                                        "value": "{{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "performance_id",
+                                            "value": "999",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "profit_amount",
+                                            "value": "30000",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{prod}}/admin/update-monthly-performance",
+                                    "host": [
+                                        "{{prod}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "update-monthly-performance"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"s\": 0,\n    \"m\": \"Performance record not found\",\n    \"err\": \"No performance record found with ID 999\"\n}"
+                        },
+                        {
+                            "name": "Error - Missing Profit Data",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "apikey",
+                                        "value": "{{apikey}}",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "token",
+                                        "value": "{{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "performance_id",
+                                            "value": "123",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{prod}}/admin/update-monthly-performance",
+                                    "host": [
+                                        "{{prod}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "update-monthly-performance"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"s\": 0,\n    \"m\": \"Either profit_amount or profit_percentage is required\",\n    \"err\": \"Missing required profit data\"\n}"
+                        },
+                        {
+                            "name": "Error - Negative Portfolio Value",
+                            "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                    {
+                                        "key": "apikey",
+                                        "value": "{{apikey}}",
+                                        "type": "text"
+                                    },
+                                    {
+                                        "key": "token",
+                                        "value": "{{token}}",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "formdata",
+                                    "formdata": [
+                                        {
+                                            "key": "performance_id",
+                                            "value": "123",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "profit_amount",
+                                            "value": "-700000",
+                                            "type": "text"
+                                        }
+                                    ]
+                                },
+                                "url": {
+                                    "raw": "{{prod}}/admin/update-monthly-performance",
+                                    "host": [
+                                        "{{prod}}"
+                                    ],
+                                    "path": [
+                                        "admin",
+                                        "update-monthly-performance"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"s\": 0,\n    \"m\": \"Portfolio value cannot be negative\",\n    \"err\": \"Calculated portfolio value would be negative: -50000.00\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Monthly Performance",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "performance_id",
+                                    "value": "123",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/delete-monthly-performance",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "delete-monthly-performance"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to delete monthly performance records. Automatically recalculates investor's current_portfolio via database trigger. Sends notification to investor. Returns deleted record details."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Dashboard Stats",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/dashboard-stats",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "dashboard-stats"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to get dashboard statistics including total investors, capital under management, average monthly return, and pending bank details."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Investor Status",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "1",
+                                    "description": "(Required) 1: active | 0: pending | -1: delete | 2: disabled | 2: rejected/overdue",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/admin/update-investor-status",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "update-investor-status"
+                            ]
+                        },
+                        "description": "Admin-only endpoint to update investor account status. Can activate (1), set to pending (0), disable (2), or delete (-1) investor accounts. Sends notification to investor except for delete status. Returns old and new status values."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Historical Performance Records",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/historical-performance-records?search=&investor_id=23&month=&year=&min_profit_percentage=&from_date=&to_date=&from_month=&from_year=&to_month=&to_year=&count=0&limit=50",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "historical-performance-records"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "investor_id",
+                                    "value": "23",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "month",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "year",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "min_profit_percentage",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "from_date",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "to_date",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "from_month",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "from_year",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "to_month",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "to_year",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "count",
+                                    "value": "0",
+                                    "description": "(Required)"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "50",
+                                    "description": "(Required)"
+                                }
+                            ]
+                        },
+                        "description": "Admin-only endpoint to get historical performance records with filters. Returns all performance records with investor details, supports search and filtering by investor, month, year, minimum profit percentage, and date ranges. Supports both exact date filtering (from_date/to_date) and month/year range filtering (from_month/from_year to to_month/to_year)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Historical Performance Chart",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/admin/historical-performance-chart?period=7d&chart_type=bar&investor_id=&count=0&limit=50",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "historical-performance-chart"
+                            ],
+                            "query": [
+                                {
+                                    "key": "period",
+                                    "value": "7d",
+                                    "description": "(Required)"
+                                },
+                                {
+                                    "key": "chart_type",
+                                    "value": "bar",
+                                    "description": "(Required)"
+                                },
+                                {
+                                    "key": "investor_id",
+                                    "value": "",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "count",
+                                    "value": "0",
+                                    "description": "(Required)"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "50",
+                                    "description": "(Required)"
+                                }
+                            ]
+                        },
+                        "description": "Admin-only endpoint to get historical performance chart data. Returns aggregated performance data for all investors or specific investor. Supports different time periods and chart types with summary statistics. Includes total_active_investors, total_capital_under_management, and avg_monthly_profit. Follows pagination pattern like get_all_investors."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Admin-only endpoints for investor management. Requires admin role (role=2)."
+        },
+        {
+            "name": "Investor",
+            "item": [
+                {
+                    "name": "Get Investor By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/investor/?user_id=2",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)"
+                                }
+                            ]
+                        },
+                        "description": "Get investor data by ID. Investors can only access their own data. Admins can access any investor's data. Returns investor profile information."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Investor Bank Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/investor/bank-details?user_id=2",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "bank-details"
+                            ],
+                            "query": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Required)"
+                                }
+                            ]
+                        },
+                        "description": "Get investor bank details by user ID. Investors can only access their own bank details. Admins can access any investor's bank details. Returns latest bank details with status and review information."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Bank Details",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "account_holder_name",
+                                    "value": "John Doe",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "bank_name",
+                                    "value": "Commonwealth Bank",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "account_number",
+                                    "value": "123456789",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "iban",
+                                    "value": "AU1234567890123456 ",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "swift_code",
+                                    "value": "CTBAAU2S",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "bsb_number",
+                                    "value": "062-000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "beneficiary_address",
+                                    "value": "123 Main St, Sydney NSW 2000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/investor/add-bank-details",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "add-bank-details"
+                            ]
+                        },
+                        "description": "Add bank details for investor account. Investors can only add bank details for themselves. Admins can add bank details for any investor by providing user_id parameter. Submits bank details with pending status (0) for admin review. Prevents duplicate submissions if pending or approved details already exist. Returns bank_details_id and status."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Update Bank Details",
+                    "request": {
+                        "method": "PUT",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "user_id",
+                                    "value": "2",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "account_holder_name",
+                                    "value": "John Doe Updated",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "bank_name",
+                                    "value": "Commonwealth Bank",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "account_number",
+                                    "value": "987654321",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "iban",
+                                    "value": "AU1234567890123456 ",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "swift_code",
+                                    "value": "CTBAAU2S",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "bsb_number",
+                                    "value": "062-000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "beneficiary_address",
+                                    "value": "456 New St, Sydney NSW 2000",
+                                    "description": "(Optional)",
+                                    "type": "text",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/investor/update-bank-details",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "update-bank-details"
+                            ]
+                        },
+                        "description": "Update existing bank details. Investors can only update their own bank details. Admins can update bank details for any investor by providing user_id parameter. If bank details are pending (status=0), updates the existing record allowing investors to fix mistakes before admin review. If bank details are approved (status=1) or rejected (status=2), creates a new record with pending status for admin review. Returns bank_details_id and status."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Dashboard",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/investor/dashboard",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "dashboard"
+                            ],
+                            "query": [
+                                {
+                                    "key": "user_id",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get investor dashboard data including initial capital, current portfolio, current month profit, and total metrics. Investors can only access their own data. Admins can access any investor's data."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Performance History",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/investor/performance-history?months=12",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "performance-history"
+                            ],
+                            "query": [
+                                {
+                                    "key": "user_id",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "months",
+                                    "value": "12",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "year",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get investor performance history with formatted data and chart data. Returns monthly performance records ordered by date."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Performance Chart",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/investor/performance-chart?period=12&chart_type=line",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "investor",
+                                "performance-chart"
+                            ],
+                            "query": [
+                                {
+                                    "key": "user_id",
+                                    "value": "",
+                                    "description": "(Optional)",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "period",
+                                    "value": "12",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "chart_type",
+                                    "value": "line",
+                                    "description": "(Optional)"
+                                }
+                            ]
+                        },
+                        "description": "Get optimized chart data for performance visualization. Returns labels and datasets formatted for chart libraries."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Investor-specific endpoints. Investors can access own data, admins can access any investor data."
+        },
+        {
+            "name": "Notifications",
+            "item": [
+                {
+                    "name": "Get Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/notification?limit=20&offset=0",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "20",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "offset",
+                                    "value": "0",
+                                    "description": "(Optional)"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "0",
+                                    "description": "(Optional) 1: active | 0: pending | -1: delete | 2: disabled | 2: rejected/overdue",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get notifications for the authenticated user. Supports pagination with limit and offset parameters. Can filter by read/unread status. Returns notifications ordered by creation date (newest first)."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Notification Counts",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/notification/counts",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification",
+                                "counts"
+                            ]
+                        },
+                        "description": "Get notification counts for the authenticated user. Returns total count, unread count, and read count of notifications."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark Notification as Read",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/notification/:id/read",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification",
+                                ":id",
+                                "read"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Notification ID to mark as read"
+                                }
+                            ]
+                        },
+                        "description": "Mark a specific notification as read for the authenticated user. Only the notification owner can mark their own notifications as read. Returns success response with updated notification.",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Mark All as Read",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/notification/read-all",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification",
+                                "read-all"
+                            ]
+                        },
+                        "description": "Mark all notifications as read for the authenticated user. Returns success response with count of notifications marked as read.",
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": []
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Delete Notification",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{API_URL}}/notification/:id",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Notification ID to delete"
+                                }
+                            ]
+                        },
+                        "description": "Delete a specific notification for the authenticated user. Only the notification owner can delete their own notifications. Returns success response."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Register FCM Token",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "fcm_token",
+                                    "value": "your-fcm-token-here",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "device_type",
+                                    "value": "android",
+                                    "description": "(Optional)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/notification/register-token",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "notification",
+                                "register-token"
+                            ]
+                        },
+                        "description": "Register or update FCM token for push notifications. Associates the token with the authenticated user's account. Supports multiple devices per user. Optional endpoint for mobile push notification support."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Notification endpoints for retrieving and managing user notifications. All endpoints require authentication. Users can only access their own notifications."
+        },
+        {
+            "name": "Calculator",
+            "item": [
+                {
+                    "name": "Calculate Return",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "invested_amount",
+                                    "value": "100000",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "expected_monthly_return",
+                                    "value": "6",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "duration",
+                                    "value": "70",
+                                    "description": "(Required)",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{API_URL}}/calculator/calculate-return",
+                            "host": [
+                                "{{API_URL}}"
+                            ],
+                            "path": [
+                                "calculator",
+                                "calculate-return"
+                            ]
+                        },
+                        "description": "Calculate estimated investment returns using compound interest. This is a public endpoint (no authentication required). Returns invested amount, monthly return rate, duration, average monthly return, total returns, final amount, and effective annual return rate."
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Public calculator endpoint for estimating investment returns using compound interest formula."
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                    "pm.request.headers.add({key: 'apikey', value: pm.environment.get('apikey')});",
+                    "pm.request.headers.add({key: 'token', value: pm.environment.get('token')});"
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "prod",
+            "value": "http://localhost:3000/api"
+        },
+        {
+            "key": "prod",
+            "value": "https://api.morvaluniversal.com/api"
+        },
+        {
+            "key": "apikey",
+            "value": "6e586cfcba174f890aab5d41a55db0f7fc9329cfd3d12c9349ee8b14a66094e6"
+        },
+        {
+            "key": "token",
+            "value": "167b99147f41426d4a80d98dd799db87"
+        },
+        {
+            "key": "LOCAL_URL",
+            "value": "http://localhost:3000/api",
+            "type": "string"
+        },
+        {
+            "key": "DEV_URL",
+            "value": "http://localhost:3000/api",
+            "type": "string"
+        },
+        {
+            "key": "PROD_URL",
+            "value": "http://localhost:3000/api",
+            "type": "string"
+        },
+        {
+            "key": "API_URL",
+            "value": "{{LOCAL_URL}}",
+            "type": "string"
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}
