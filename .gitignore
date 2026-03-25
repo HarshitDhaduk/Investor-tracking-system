@@ -5,6 +5,7 @@ public/*
 *.log
 dist/*
 build/*
+*.zip
 
 # Ignore IDE specific files
 .vscode/
