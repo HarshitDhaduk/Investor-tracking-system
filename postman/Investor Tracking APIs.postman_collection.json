@@ -1,10 +1,11 @@
 {
   "info": {
-    "_postman_id": "26488732-9b91-48fc-9d69-338119cbbbb8",
+    "_postman_id": "e3be26a0-fb73-43a7-b5a5-b1dd918ca4b6",
     "name": "Investor Tracking APIs",
     "description": "API collection for Morval Investor authentication and management system",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "32054086"
+    "_exporter_id": "46580316",
+    "_collection_link": "https://go.postman.co/collection/46580316-e3be26a0-fb73-43a7-b5a5-b1dd918ca4b6?source=collection_link"
   },
   "item": [
     {
@@ -933,23 +934,25 @@
                 "header": [],
                 "body": {
                   "mode": "formdata",
-                  "formdata": [
-                    {
-                      "key": "performance_id",
-                      "value": "123",
-                      "description": "(Required)",
-                      "type": "text"
-                    }
-                  ]
+                  "formdata": []
                 },
                 "url": {
-                  "raw": "{{API_URL}}/admin/delete-monthly-performance",
+                  "raw": "{{API_URL}}/admin/performance/delete/:id",
                   "host": [
                     "{{API_URL}}"
                   ],
                   "path": [
                     "admin",
-                    "delete-monthly-performance"
+                    "performance",
+                    "delete",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "1",
+                      "description": "(Required)"
+                    }
                   ]
                 },
                 "description": "Admin-only endpoint to delete monthly performance records. Automatically recalculates investor's current_portfolio via database trigger. Sends notification to investor. Returns deleted record details."
@@ -1230,13 +1233,14 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{API_URL}}/admin/historical-performance-records?search=&investor_id=23&month=&year=&min_profit_percentage=&from_date=&to_date=&from_month=&from_year=&to_month=&to_year=&count=0&limit=50",
+                  "raw": "{{API_URL}}/admin/performance/history?search=&month=&year=&min_profit_percentage=&from_date=&to_date=&from_month=&from_year=&to_month=&to_year=&count=0&limit=50",
                   "host": [
                     "{{API_URL}}"
                   ],
                   "path": [
                     "admin",
-                    "historical-performance-records"
+                    "performance",
+                    "history"
                   ],
                   "query": [
                     {
@@ -1247,7 +1251,8 @@
                     {
                       "key": "investor_id",
                       "value": "23",
-                      "description": "(Optional)"
+                      "description": "(Optional)",
+                      "disabled": true
                     },
                     {
                       "key": "month",
@@ -1316,24 +1321,25 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{API_URL}}/admin/historical-performance-chart?period=7d&chart_type=bar&investor_id=&count=0&limit=50",
+                  "raw": "{{API_URL}}/admin/performance/chart?period=12&chart_type=bar&investor_id=&count=0&limit=50",
                   "host": [
                     "{{API_URL}}"
                   ],
                   "path": [
                     "admin",
-                    "historical-performance-chart"
+                    "performance",
+                    "chart"
                   ],
                   "query": [
                     {
                       "key": "period",
-                      "value": "7d",
-                      "description": "(Required)"
+                      "value": "12",
+                      "description": "(Required) (Optional) 3 | 6 | 12 | 16 | 24"
                     },
                     {
                       "key": "chart_type",
                       "value": "bar",
-                      "description": "(Required)"
+                      "description": "(Required) line | bar"
                     },
                     {
                       "key": "investor_id",
@@ -1371,13 +1377,13 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{API_URL}}/investor/?user_id=2",
+              "raw": "{{API_URL}}/investor/by-id?user_id=2",
               "host": [
                 "{{API_URL}}"
               ],
               "path": [
                 "investor",
-                ""
+                "by-id"
               ],
               "query": [
                 {
@@ -1481,13 +1487,14 @@
               ]
             },
             "url": {
-              "raw": "{{API_URL}}/investor/add-bank-details",
+              "raw": "{{API_URL}}/investor/bank-details/add",
               "host": [
                 "{{API_URL}}"
               ],
               "path": [
                 "investor",
-                "add-bank-details"
+                "bank-details",
+                "add"
               ]
             },
             "description": "Add bank details for investor account. Investors can only add bank details for themselves. Admins can add bank details for any investor by providing user_id parameter. Submits bank details with pending status (0) for admin review. Prevents duplicate submissions if pending or approved details already exist. Returns bank_details_id and status."
@@ -1557,13 +1564,14 @@
               ]
             },
             "url": {
-              "raw": "{{API_URL}}/investor/update-bank-details",
+              "raw": "{{API_URL}}/investor/bank-details/update",
               "host": [
                 "{{API_URL}}"
               ],
               "path": [
                 "investor",
-                "update-bank-details"
+                "bank-details",
+                "update"
               ]
             },
             "description": "Update existing bank details. Investors can only update their own bank details. Admins can update bank details for any investor by providing user_id parameter. If bank details are pending (status=0), updates the existing record allowing investors to fix mistakes before admin review. If bank details are approved (status=1) or rejected (status=2), creates a new record with pending status for admin review. Returns bank_details_id and status."
@@ -1603,31 +1611,20 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{API_URL}}/investor/performance-history?months=12",
+              "raw": "{{API_URL}}/investor/performance/history?user_id=3",
               "host": [
                 "{{API_URL}}"
               ],
               "path": [
                 "investor",
-                "performance-history"
+                "performance",
+                "history"
               ],
               "query": [
                 {
                   "key": "user_id",
-                  "value": "",
-                  "description": "(Optional)",
-                  "disabled": true
-                },
-                {
-                  "key": "months",
-                  "value": "12",
+                  "value": "3",
                   "description": "(Optional)"
-                },
-                {
-                  "key": "year",
-                  "value": "",
-                  "description": "(Optional)",
-                  "disabled": true
                 }
               ]
             },
@@ -1641,7 +1638,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{API_URL}}/admin/performance/chart?period=12&chart_type=line",
+              "raw": "{{API_URL}}/admin/performance/chart?user_id=3&period=3&chart_type=line",
               "host": [
                 "{{API_URL}}"
               ],
@@ -1653,19 +1650,18 @@
               "query": [
                 {
                   "key": "user_id",
-                  "value": "",
-                  "description": "(Optional)",
-                  "disabled": true
+                  "value": "3",
+                  "description": "(Optional)"
                 },
                 {
                   "key": "period",
-                  "value": "12",
-                  "description": "(Optional)"
+                  "value": "3",
+                  "description": "(Optional) 3 | 6 | 12 | 16 | 24"
                 },
                 {
                   "key": "chart_type",
                   "value": "line",
-                  "description": "(Optional)"
+                  "description": "(Optional) line | bar"
                 }
               ]
             },

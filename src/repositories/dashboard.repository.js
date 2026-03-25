@@ -38,7 +38,7 @@ class DashboardRepository extends BaseRepository {
     // Get active configurable dashboard stats ordered by display_order.
     async getActiveConfigurableStats() {
         return this.select(
-            "SELECT stat_key, stat_value, stat_label, is_percentage, is_currency FROM admin_dashboard_stats WHERE is_active = 1 ORDER BY display_order ASC"
+            "SELECT stat_name, stat_value FROM admin_dashboard_stats WHERE status = 1 ORDER BY display_order ASC"
         );
     }
 

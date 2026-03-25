@@ -28,11 +28,12 @@ class DashboardService {
         // Add configurable statistics
         if (Array.isArray(configurableStats)) {
             configurableStats.forEach(stat => {
-                response[stat.stat_key] = {
+                const key = stat.stat_name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                response[key] = {
                     value: parseFloat(stat.stat_value),
-                    label: stat.stat_label,
-                    is_percentage: stat.is_percentage === 1,
-                    is_currency: stat.is_currency === 1,
+                    label: stat.stat_name,
+                    is_percentage: false, // Defaulting as these columns do not exist
+                    is_currency: true, 
                 };
             });
         }

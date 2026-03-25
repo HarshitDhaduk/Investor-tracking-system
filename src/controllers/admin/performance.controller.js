@@ -13,19 +13,19 @@ class PerformanceController {
         return ApiResponse.success(res, result, result.message || "Performance added and distributed successfully");
     });
 
-    // GET /api/admin/historical-performance
+    // GET /api/admin/performance/history
     getHistoricalPerformance = catchAsync(async (req, res) => {
         const result = await performanceService.getHistoricalRecords(req.query);
         return ApiResponse.success(res, result, "Historical performance records retrieved");
     });
 
-    // GET /api/admin/performance-chart
+    // GET /api/admin/performance/chart
     getPerformanceChart = catchAsync(async (req, res) => {
         const result = await performanceService.getChartData(req.query);
         return ApiResponse.success(res, result, "Performance chart data retrieved");
     });
 
-    // DELETE /api/admin/delete-performance/:id
+    // DELETE /api/admin/performance/:id
     deletePerformance = catchAsync(async (req, res) => {
         const result = await performanceService.deletePerformance(req.params.id, req._id);
         return ApiResponse.success(res, result, "Performance record deleted and portfolio rolled back");

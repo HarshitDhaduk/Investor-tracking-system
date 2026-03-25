@@ -1,7 +1,12 @@
 import { BaseRepository } from "./base.repository.js";
+import { POOL } from "../config/database.js";
 
 // Performance Repository — data access for investor_portfolio_performance and fund_performance.
 class PerformanceRepository extends BaseRepository {
+    constructor() {
+        super();
+        this.pool = POOL;
+    }
 
     // Add investor performance record.
     async addInvestorPerformance({ user_id, month, year, profit_percentage, portfolio_value_before, portfolio_value_after, profit_amount, notes, added_by }) {
@@ -92,18 +97,43 @@ class PerformanceRepository extends BaseRepository {
     }
 
     // Get historical performance for an investor.
-    async getInvestorHistory(userId) {
-        return this.select(
-            "SELECT id, month, year, profit_percentage, profit_amount, portfolio_value_before, portfolio_value_after, notes, created_at FROM investor_portfolio_performance WHERE user_id = ? ORDER BY year DESC, month DESC",
-            [userId]
-        );
+    async getInvestorHistory(userId, filterYear = null, limit = null) {
+        let query = "SELECT id, month, year, profit_percentage, profit_amount, portfolio_value_before, portfolio_value_after, portfolio_value_after as portfolio_value, notes, created_at FROM investor_portfolio_performance WHERE user_id = ?";
+        const params = [userId];
+
+        if (filterYear) {
+            query += " AND year = ?";
+            params.push(filterYear);
+        }
+
+        query += " ORDER BY year DESC, month DESC";
+
+        if (limit) {
+            query += " LIMIT ?";
+            params.push(limit);
+        }
+
+        return this.select(query, params);
     }
 
     // Get historical fund performance.
-    async getFundHistory() {
-        return this.select(
-            "SELECT id, month, year, performance_percentage, created_at FROM fund_performance ORDER BY year DESC, month DESC"
-        );
+    async getFundHistory(filterYear = null, limit = null) {
+        let query = "SELECT id, month, year, performance_percentage as profit_percentage, adjusted_fund_value as portfolio_value, monthly_payables_total as profit_amount, notes, created_at FROM fund_performance";
+        const params = [];
+
+        if (filterYear) {
+            query += " WHERE year = ?";
+            params.push(filterYear);
+        }
+
+        query += " ORDER BY year DESC, month DESC";
+
+        if (limit) {
+            query += " LIMIT ?";
+            params.push(limit);
+        }
+
+        return this.select(query, params);
     }
 
     // Get performance for aggregation/chart (fund).
@@ -119,6 +149,63 @@ class PerformanceRepository extends BaseRepository {
             "SELECT month, year, profit_percentage FROM investor_portfolio_performance WHERE user_id = ? ORDER BY year ASC, month ASC",
             [userId]
         );
+    }
+
+    // Get total sum of profit amount for an investor.
+    async getTotalProfitAmount(userId) {
+        const result = await this.selectOne(
+            "SELECT SUM(profit_amount) AS total_profit FROM investor_portfolio_performance WHERE user_id = ?",
+            [userId]
+        );
+        return parseFloat(result?.total_profit || 0);
+    }
+
+    // Get total number of months invested for an investor.
+    async getTotalMonthsInvested(userId) {
+        const result = await this.selectOne(
+            "SELECT COUNT(*) AS total FROM investor_portfolio_performance WHERE user_id = ?",
+            [userId]
+        );
+        return parseInt(result?.total || 0);
+    }
+
+    // Get investor performance records for specific periods (dateConditions is an array of SQL OR conditions).
+    async getInvestorPerformanceByPeriod(userId, dateConditionsStr) {
+        let query = `
+            SELECT 
+                p.month, p.year, 
+                p.portfolio_value_after as portfolio_value,
+                p.profit_amount,
+                p.profit_percentage
+            FROM investor_portfolio_performance p
+            INNER JOIN users u ON p.user_id = u.id
+            WHERE u.role = 1 AND p.user_id = ?
+        `;
+        if (dateConditionsStr) {
+            query += ` AND (${dateConditionsStr})`;
+        }
+        query += ` ORDER BY p.year ASC, p.month ASC`;
+        
+        return this.select(query, [userId]);
+    }
+
+    // Get fund performance records for specific periods.
+    async getFundPerformanceByPeriod(dateConditionsStr) {
+        let query = `
+            SELECT 
+                month, year, 
+                adjusted_fund_value as portfolio_value, 
+                monthly_payables_total as profit_amount, 
+                performance_percentage as profit_percentage
+            FROM fund_performance
+            WHERE 1=1
+        `;
+        if (dateConditionsStr) {
+            query += ` AND (${dateConditionsStr})`;
+        }
+        query += ` ORDER BY year ASC, month ASC`;
+        
+        return this.select(query);
     }
 }
 

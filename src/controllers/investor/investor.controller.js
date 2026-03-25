@@ -14,10 +14,43 @@ class InvestorController {
         return ApiResponse.success(res, result, "Dashboard retrieved successfully");
     });
 
-    // GET /api/investor/portfolio-performance
+    // GET /api/investor/portfolio
     getPortfolioPerformance = catchAsync(async (req, res) => {
-        const result = await investorService.getPortfolioPerformance(req._id);
+        const targetUserId = req._role === 2 && req.query.user_id ? req.query.user_id : req._id;
+        if (req._role !== 2 && req._id != targetUserId) {
+            return ApiResponse.error(res, "Insufficient privileges to access this portfolio performance", 403);
+        }
+        const result = await investorService.getPortfolioPerformance(targetUserId);
         return ApiResponse.success(res, result, "Portfolio performance retrieved");
+    });
+
+    // GET /api/investor/by-id
+    getInvestorById = catchAsync(async (req, res) => {
+        const targetUserId = req.query.user_id;
+        if (!targetUserId) {
+            return ApiResponse.error(res, "User ID is required", 400);
+        }
+        if (req._role !== 2 && req._id != targetUserId) {
+            return ApiResponse.error(res, "Insufficient privileges to access this user's data", 403);
+        }
+        const result = await investorService.getInvestorById(targetUserId);
+        return ApiResponse.success(res, result, "Investor data retrieved successfully");
+    });
+
+    // GET /api/investor/performance/chart
+    getPerformanceChart = catchAsync(async (req, res) => {
+        const targetUserId = req._role === 2 && req.query.user_id ? req.query.user_id : req._id;
+        if (req._role !== 2 && req._id != targetUserId) {
+            return ApiResponse.error(res, "Insufficient privileges to access this data", 403);
+        }
+        // Reusing performanceService chart logic
+        const result = await performanceService.getChartData({
+            type: "individual",
+            user_id: targetUserId,
+            period: req.query.period,
+            chart_type: req.query.chart_type
+        });
+        return ApiResponse.success(res, result, "Performance chart data retrieved successfully");
     });
 
     // GET /api/investor/bank-details/get
@@ -39,10 +72,19 @@ class InvestorController {
         return ApiResponse.success(res, result, "Bank details updated successfully");
     });
 
-    // GET /api/investor/history
-    getHistory = catchAsync(async (req, res) => {
+    // GET /api/investor/performance/history
+    getPerformanceHistory = catchAsync(async (req, res) => {
+        const targetUserId = req._role === 2 && req.query.user_id ? req.query.user_id : req._id;
+        if (req._role !== 2 && req._id != targetUserId) {
+            return ApiResponse.error(res, "Insufficient privileges to access this data", 403);
+        }
         // Reusing performanceService history logic
-        const result = await performanceService.getHistoricalRecords({ type: "individual", user_id: req._id });
+        const result = await performanceService.getHistoricalRecords({ 
+            type: "individual", 
+            user_id: targetUserId,
+            months: req.query.months,
+            year: req.query.year
+        });
         return ApiResponse.success(res, result, "Performance history retrieved");
     });
 }

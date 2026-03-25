@@ -181,53 +181,178 @@ class PerformanceService {
     }
 
 
-    // Get historical records formatted for Year/Month view.
+    // Get historical records formatted with charts
     async getHistoricalRecords(query) {
-        const { type, user_id } = query;
-        let records = [];
+        const { type, user_id, months = 12, year } = query;
+        const limitMonths = parseInt(months);
+        const filterYear = year ? parseInt(year) : null;
 
         if (type === "individual") {
             if (!user_id) throw ApiError.badRequest("User ID required for individual history");
-            records = await performanceRepository.getInvestorHistory(user_id);
-        } else {
-            records = await performanceRepository.getFundHistory();
-            // rename property for consistency if needed, but repository already uses performance_percentage
-        }
+            
+            const performance = await performanceRepository.getInvestorHistory(user_id, filterYear, limitMonths);
 
-        return this.formatHistoryByYear(records);
-    }
+            // Format data for response
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    // Format flat array into { year: { month: data } } structure.
-    formatHistoryByYear(records) {
-        const years = {};
-        for (const rec of records) {
-            if (!years[rec.year]) {
-                years[rec.year] = { year: rec.year, months: {} };
-            }
-            years[rec.year].months[rec.month] = {
-                id: rec.id,
-                percentage: rec.profit_percentage || rec.performance_percentage,
-                amount: rec.profit_amount || null,
-                notes: rec.notes || null,
-                created_at: rec.created_at
+            const formattedPerformance = performance.map(record => ({
+                id: record.id,
+                month: record.month,
+                year: record.year,
+                month_name: monthNames[record.month - 1],
+                portfolio_value: parseFloat(record.portfolio_value),
+                profit_amount: parseFloat(record.profit_amount),
+                profit_percentage: parseFloat(record.profit_percentage),
+                notes: record.notes,
+                created_at: record.created_at
+            }));
+
+            const reversedPerformance = [...formattedPerformance].reverse();
+            const chartData = {
+                labels: reversedPerformance.map(r => monthNamesShort[r.month - 1]),
+                portfolio_values: reversedPerformance.map(r => r.portfolio_value),
+                profit_amounts: reversedPerformance.map(r => r.profit_amount)
             };
+
+            return { performance: formattedPerformance, chart_data: chartData };
+
+        } else {
+            // Fund History Logic
+            const performance = await performanceRepository.getFundHistory(filterYear, limitMonths);
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            const formattedPerformance = performance.map(record => ({
+                id: record.id,
+                month: record.month,
+                year: record.year,
+                month_name: monthNames[record.month - 1],
+                portfolio_value: parseFloat(record.portfolio_value || 0),
+                profit_amount: parseFloat(record.profit_amount || 0),
+                profit_percentage: parseFloat(record.profit_percentage || 0),
+                notes: record.notes,
+                created_at: record.created_at
+            }));
+
+            const reversedPerformance = [...formattedPerformance].reverse();
+            const chartData = {
+                labels: reversedPerformance.map(r => monthNamesShort[r.month - 1]),
+                portfolio_values: reversedPerformance.map(r => r.portfolio_value),
+                profit_amounts: reversedPerformance.map(r => r.profit_amount)
+            };
+
+            return { performance: formattedPerformance, chart_data: chartData };
         }
-        return Object.values(years).sort((a, b) => b.year - a.year);
     }
 
-    // Get chart data.
-    async getChartData(query) {
-        const { type, user_id } = query;
-        let data = [];
-        if (type === "individual") {
-            data = await performanceRepository.getInvestorPerformanceChartData(user_id);
-        } else {
-            data = await performanceRepository.getFundPerformanceChartData();
+    // Get chart data padded with missing months.
+    async getChartData(queryParams) {
+        const { type, user_id, period = 12, chart_type = "line" } = queryParams;
+        const periodNum = parseInt(period);
+
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const allMonths = [];
+
+        for (let i = periodNum - 1; i >= 0; i--) {
+            let targetMonth = currentMonth - i;
+            let targetYear = currentYear;
+            while (targetMonth <= 0) {
+                targetMonth += 12;
+                targetYear -= 1;
+            }
+            allMonths.push({
+                month: targetMonth,
+                year: targetYear,
+                label: `${monthNamesShort[targetMonth - 1]} ${targetYear}`
+            });
         }
-        return data.map(d => ({
-            period: `${d.year}-${d.month.toString().padStart(2, '0')}`,
-            percentage: parseFloat(d.profit_percentage || d.performance_percentage)
-        }));
+
+        const dateConditions = [];
+        for (const monthData of allMonths) {
+            dateConditions.push(`(year = ${monthData.year} AND month = ${monthData.month})`);
+        }
+        const periodFilter = dateConditions.length > 0 ? ` AND (${dateConditions.join(' OR ')})` : '';
+
+        let chartData = [];
+        let summaryValues = {
+            initial_capital: 0,
+            current_portfolio: 0
+        };
+
+        if (type === "individual") {
+            if (!user_id) throw ApiError.badRequest("User ID required");
+            const dateConditionsStr = dateConditions.join(' OR ');
+            chartData = await performanceRepository.getInvestorPerformanceByPeriod(user_id, dateConditionsStr);
+
+            const investorStats = await userRepository.findById(user_id);
+            if (investorStats) {
+                summaryValues.initial_capital = investorStats.initial_capital;
+                summaryValues.current_portfolio = investorStats.current_portfolio;
+            }
+        } else {
+            const dateConditionsStr = dateConditions.join(' OR ');
+            chartData = await performanceRepository.getFundPerformanceByPeriod(dateConditionsStr);
+        }
+
+        const dataMap = new Map();
+        chartData.forEach(record => {
+            dataMap.set(`${record.year}-${record.month}`, record);
+        });
+
+        const labels = [];
+        const portfolioValues = [];
+        const profitAmounts = [];
+        const profitPercentages = [];
+
+        for (const monthData of allMonths) {
+            const record = dataMap.get(`${monthData.year}-${monthData.month}`);
+            labels.push(monthData.label);
+            if (record) {
+                portfolioValues.push(parseFloat(record.portfolio_value || 0));
+                profitAmounts.push(parseFloat(record.profit_amount || 0));
+                profitPercentages.push(parseFloat(record.profit_percentage || 0));
+            } else {
+                portfolioValues.push(0);
+                profitAmounts.push(0);
+                profitPercentages.push(0);
+            }
+        }
+
+        let latestPortfolioValue = 0;
+        for (let i = portfolioValues.length - 1; i >= 0; i--) {
+            if (portfolioValues[i] !== 0) {
+                latestPortfolioValue = portfolioValues[i];
+                break;
+            }
+        }
+        const totalProfit = profitAmounts.reduce((sum, profit) => sum + profit, 0);
+        const nonZeroPercentages = profitPercentages.filter(pct => pct !== 0);
+        const avgProfitPercentage = nonZeroPercentages.length > 0
+            ? nonZeroPercentages.reduce((sum, pct) => sum + pct, 0) / nonZeroPercentages.length
+            : 0;
+
+        return {
+            labels,
+            datasets: [
+                { label: "Portfolio Value", data: portfolioValues, type: chart_type },
+                { label: "Monthly Profit", data: profitAmounts, type: chart_type },
+                { label: "Profit Percentage", data: profitPercentages, type: chart_type }
+            ],
+            summary: {
+                initial_capital: parseFloat(summaryValues.initial_capital || 0),
+                current_portfolio: parseFloat(summaryValues.current_portfolio || 0),
+                latest_portfolio_value: parseFloat(latestPortfolioValue.toFixed(6)),
+                total_profit: parseFloat(totalProfit.toFixed(2)),
+                avg_profit_percentage: parseFloat(avgProfitPercentage.toFixed(2)),
+                period_months: periodNum
+            }
+        };
     }
 
     // Delete performance record and roll back current_portfolio.
